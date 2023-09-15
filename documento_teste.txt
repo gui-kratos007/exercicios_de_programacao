@@ -1,1 +1,1 @@
-Este é um documento teste. Este documento tem o objetivo de teste para um código em Python. O doumento serve para ter um texto que o código em python irá contar as palavras desse texto. 
+Na vida, a perseverança é essencial. Perseverança nos desafios, perseverança nas conquistas. Com dedicação e perseverança, alcançamos nossos objetivos. A perseverança nos impulsiona, nos inspira e nos torna resilientes diante das adversidades.
