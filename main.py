@@ -3,9 +3,10 @@ def contar_palavras(file_path):
     # numero_de_palavras = 0
     with open(file_path, 'r') as file:
         dados = file.read()
-        linhas = dados.split()
-        if len(linhas) > 0:
-            return len(linhas)
+        print(dados)
+        palavras = dados.split()
+        if len(palavras) > 0:
+            return len(palavras)
     return "arquivo vazio"
 
 
@@ -23,9 +24,9 @@ def frequencia():
 
 
 if __name__ == "__main__":
-    """file_path = input("Entre com o path do arquivo que deseja processar: ")
+    file_path = input("Entre com o path do arquivo que deseja processar: ")
     numero_de_palavras = contar_palavras(file_path)
-    print(numero_de_palavras)"""
+    print(numero_de_palavras)
 
     frequencia()
 
