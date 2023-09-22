@@ -21,7 +21,7 @@ def get_count(item):
     """
     Obtém o segundo elemento (contagem) de cada itém.
 
-    :param item: Uma tupla ou lista de dois elementos onde o segundo elemento Ã© a contagem.
+    :param item: Uma tupla ou lista de dois elementos onde o segundo elemento é a contagem.
     :return: A contagem (segundo elemento) do item.
     """
     return item[1]
