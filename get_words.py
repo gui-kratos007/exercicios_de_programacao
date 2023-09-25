@@ -27,9 +27,23 @@ def get_count(item):
     return item[1]
 
 
+def search_word(txt):
+    word = input("digite a palavra que que pesquisar: ")
+    lista_de_busca = []
+    for i, item in enumerate(text_clean(txt).split()):
+        if item == word:
+            lista_de_busca.append(i)
+    if len(lista_de_busca) > 0:
+        return lista_de_busca
+    return "essa palavra não está no texto"
+
+
 if __name__ == "__main__":
     path = input("Entre com o path do arquivo que deseja processar: ")
     text = get_text(path)
+
+    # print(text.split()[7:22])
+
     # Divide a string em palavras
     list_words = text_clean(text).split()
     # print(set(list_words))
@@ -45,3 +59,7 @@ if __name__ == "__main__":
     # Imprime as palavras e as suas contagens em ordem decrescente
     for word, count in order_words:
         print(f"{word} ({count})")
+    # busca os índices das palavras iguais as escolhidas pelo usuário
+    busca = search_word(text)
+    # imprime os índices das palavras iguais as escolhidas pelo usuário
+    print(busca)
