@@ -20,8 +20,21 @@ def frequencia(data):
     return [(name, text_clean(data).split().count(name)) for name in text_clean(data).split()]
 
 
+def search_word(txt):
+    word = input("digite a palavra que que pesquisar: ")
+    lista_de_busca = []
+    for i, item in enumerate(text_clean(txt).split()):
+        if item == word:
+            lista_de_busca.append(i)
+    if len(lista_de_busca) > 0:
+        return lista_de_busca
+    return "essa palavra não está no texto"
+
+
 if __name__ == "__main__":
     file_path = input("Entre com o path do arquivo que deseja processar: ")
     text = get_text(file_path)
     list_words = frequencia(text)
     print(list_words)
+    busca = search_word(text)
+    print(busca)
