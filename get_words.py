@@ -38,6 +38,16 @@ def search_word(txt):
     return "essa palavra não está no texto"
 
 
+def ascending_alphabetical_order(list_words):
+    word_sorted = [word for word in set(list_words)]
+    return sorted(word_sorted)
+
+
+def descending_alphabetical_order(list_words):
+    word_sorted = [word for word in set(list_words)]
+    return sorted(word_sorted, reverse=True)
+
+
 if __name__ == "__main__":
     path = input("Entre com o path do arquivo que deseja processar: ")
     text = get_text(path)
@@ -59,7 +69,19 @@ if __name__ == "__main__":
     # Imprime as palavras e as suas contagens em ordem decrescente
     for word, count in order_words:
         print(f"{word} ({count})")
+
+
+    ordem_alfabetica_crescente = ascending_alphabetical_order(list_words)
+    ordem_alfabetica_decrescente = descending_alphabetical_order(list_words)
+    print("Lista em ordem alfabética crescente:")
+    # imprime a lista em ordem alfabética crescente
+    print(ordem_alfabetica_crescente)
+    print("Lista em ordem alfabetica decrescente:")
+    # imprime a lista em ordem alfabética decrescente
+    print(ordem_alfabetica_decrescente)
+
     # busca os índices das palavras iguais as escolhidas pelo usuário
     busca = search_word(text)
     # imprime os índices das palavras iguais as escolhidas pelo usuário
     print(busca)
+
