@@ -70,7 +70,6 @@ if __name__ == "__main__":
     for word, count in order_words:
         print(f"{word} ({count})")
 
-
     ordem_alfabetica_crescente = ascending_alphabetical_order(list_words)
     ordem_alfabetica_decrescente = descending_alphabetical_order(list_words)
     print("Lista em ordem alfabética crescente:")
