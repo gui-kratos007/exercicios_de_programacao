@@ -1,8 +1,8 @@
 def get_text(path):
-    with open(path, 'r') as file:
+    with open(path, 'r', encoding="utf-8") as file:
         dados = file.read()
         if dados:
-            return dados.encode("latin1").decode()
+            return dados
     return "arquivo vazio"
 
 
