@@ -10,64 +10,72 @@ def menu():
         print("[3] -> Buscar palavra")
         print("[9] -> Sair")
 
-        answer = int(input("Digite sua opção: "))
-        if answer == 1:
-            path = input("Entre com o path do arquivo que deseja processar: ")
-            text = get_text(path)
-            print()
-            print("O arquivo foi carregado, veja abaixo o seu conteúdo: ")
-            print(text)
-            print()
-        elif answer == 2:
-            path = input("Entre com o path do arquivo que deseja processar: ")
-            text = get_text(path)
-            list_words = text_clean(text).split()
-            print()
-            print(list_words)
-            print()
-            print("-" * 5, "Escolha uma opção para interagir com essa lista", "-" * 5)
-            print("Opções:")
-            print("[1] -> Ordenar por palavras mais frequentes")
-            print("[2] -> Ordenar por palavras menos frequentes")
-            print("[3] -> Ordem alfabética (crescente)")
-            print("[4] -> Ordem alfabética (decrescente)")
-            print("[5] -> Voltar ao Menu principal")
-            print("[6] -> Sair")
+        try:
+            answer = int(input("Digite sua opção: "))
+            if answer == 1:
+                path = input("Entre com o path do arquivo que deseja processar: ")
+                text = get_text(path)
+                print()
+                print("O arquivo foi carregado, veja abaixo o seu conteúdo: ")
+                print(text)
+                print()
+            elif answer == 2:
+                path = input("Entre com o path do arquivo que deseja processar: ")
+                text = get_text(path)
+                list_words = text_clean(text).split()
+                print()
+                print(list_words)
+                print()
+                print("-" * 5, "Escolha uma opção para interagir com essa lista", "-" * 5)
+                print("Opções:")
+                print("[1] -> Ordenar por palavras mais frequentes")
+                print("[2] -> Ordenar por palavras menos frequentes")
+                print("[3] -> Ordem alfabética (crescente)")
+                print("[4] -> Ordem alfabética (decrescente)")
+                print("[5] -> Voltar ao Menu principal")
+                print("[6] -> Sair")
 
-            option = int(input("Digite sua opção: "))
-            print()
-            if option == 1:
-                words_count = [[word, list_words.count(word)] for word in set(list_words)]
-                order_words = sorted(words_count, key=get_count, reverse=True)
-                for word, count in order_words:
-                    print(f"{word} ({count})")
-            elif option == 2:
-                words_count = [[word, list_words.count(word)] for word in set(list_words)]
-                order_words = sorted(words_count, key=get_count)
-                for word, count in order_words:
-                    print(f"{word} ({count})")
-            elif option == 3:
-                ordem_alfabetica_crescente = ascending_alphabetical_order(list_words)
-                print(ordem_alfabetica_crescente)
-            elif option == 4:
-                ordem_alfabetica_decrescente = descending_alphabetical_order(list_words)
-                print(ordem_alfabetica_decrescente)
-            elif option == 5:
-                continue
-            elif option == 6:
+                option = int(input("Digite sua opção: "))
+                print()
+                if option == 1:
+                    words_count = [[word, list_words.count(word)] for word in set(list_words)]
+                    order_words = sorted(words_count, key=get_count, reverse=True)
+                    for word, count in order_words:
+                        print(f"{word} ({count})")
+                elif option == 2:
+                    words_count = [[word, list_words.count(word)] for word in set(list_words)]
+                    order_words = sorted(words_count, key=get_count)
+                    for word, count in order_words:
+                        print(f"{word} ({count})")
+                elif option == 3:
+                    ordem_alfabetica_crescente = ascending_alphabetical_order(list_words)
+                    print(ordem_alfabetica_crescente)
+                elif option == 4:
+                    ordem_alfabetica_decrescente = descending_alphabetical_order(list_words)
+                    print(ordem_alfabetica_decrescente)
+                elif option == 5:
+                    continue
+                elif option == 6:
+                    print("Programa finalizado!")
+                    break
+                else:
+                    print("Opção inválida. Volte do ínicio e tente novamente com um número válido.")
+                print()
+            elif answer == 3:
+                path = input("Entre com o path do arquivo que deseja processar: ")
+                text = get_text(path)
+                list_words = text_clean(text).split()
+                search = search_word(text)
+                print()
+                print(search)
+                print()
+            elif answer == 9:
+                print("Programa finalizado!")
                 break
             else:
-                print("Opção inválida. Volte do ínicio e tente novamente com um número válido.")
-            print()
-        elif answer == 3:
-            path = input("Entre com o path do arquivo que deseja processar: ")
-            text = get_text(path)
-            search = search_word(text)
-            print()
-            print(search)
-            print()
-        elif answer == 9:
-            break
+                print("Número inválido, tente novamente inserindo um válido.")
+        except ValueError:
+            print("Você não digitou um número inteiro, tente novamente.")
 
 
 def get_text(path):
@@ -107,7 +115,7 @@ def search_word(txt):
             lista_de_busca.append(i)
     if len(lista_de_busca) > 0:
         return lista_de_busca
-    return "essa palavra não está no texto"
+    return "Essa palavra não está no texto, tente novamente do início."
 
 
 def ascending_alphabetical_order(list_words):
