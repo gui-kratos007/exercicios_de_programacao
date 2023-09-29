@@ -1,3 +1,5 @@
+import random
+
 def get_text(path):
     with open(path, 'r', encoding="utf-8") as file:
         dados = file.read()
@@ -38,18 +40,76 @@ def search_word(txt):
     return "essa palavra não está no texto"
 
 
-def frequency_previous(txt, words):
-    list_of_words = search_word(txt)
-    indices = []
-    frequency = {}
-    for i in list_of_words:
-        if i > 0:
-            indice_anterior = i - 1
-            previous_word = words[indice_anterior]
-            indices.append(indice_anterior)
-            frequency[previous_word] = frequency.get(previous_word, 0) + 1
-    return indices, frequency
+def frequency(txt):
+    words = text_clean(txt).split()
+    word = input("digite a palavra que quer pesquisar: ")
+    lista_de_busca = []
+    previous = {}
+    subsequent = {}
 
+    for i, item in enumerate(text_clean(txt).split()):
+        if item == word:
+            lista_de_busca.append(i)
+
+    if len(lista_de_busca) > 0:
+        # Conta a frequencia das palavras anteriores e posteriores
+        for j, item in enumerate(words):
+            if item == word:
+                previous_word = words[j - 1]
+                subsequent_word = words[j + 1]
+
+                if previous_word in previous:
+                    previous[previous_word] += 1
+                else:
+                    previous[previous_word] = 1
+
+                if subsequent_word in subsequent:
+                    subsequent[subsequent_word] += 1
+                else:
+                    subsequent[subsequent_word] = 1
+
+        print()
+        print("Palavras anteriores à que você escolheu e sua frequência de aparições: ")
+        print(previous)
+        print("Palavras posteriores à que você escreveu e sua frequência de aparições: ")
+        print(subsequent)
+
+        # Encontra a(s) palavra(s) mais frequente(s)
+        previous_word = max(previous, key=lambda k: previous[k])
+        subsequent_word = max(subsequent, key=lambda k: subsequent[k])
+        # print(previous_word)
+        # print(subsequent_word)
+
+        total_itens_previous = sum(previous.values())
+        for l in previous.values():
+            percentage_value = (l / total_itens_previous) * 100
+            for n in previous:
+                if n == l:
+                    previous_name = previous[n]
+                    print(previous_name, percentage_value, "%")
+
+        # Verifica se há empate de palavras mais frequentes
+        previous_word_tie = [word for word in previous if previous[word] == previous[previous_word]]
+        subsequent_word_tie = [word for word in subsequent if subsequent[word] == subsequent[subsequent_word]]
+        print('-' * 150)
+        print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
+              "uma é porque estão empatadas na frequencia.")
+        print()
+        print("Lista das mais frequentes anteriores:")
+        print(previous_word_tie)
+        print()
+        print("Lista das mais frequentes anteriores:")
+        print(subsequent_word_tie)
+
+        """percentage_previous = """
+
+        """# usa uma função da lib random para escolher aleatoriamente entre os mais frequentes.
+        if len(previous_word_tie) > 1:
+            previous_word = random.choice(previous_word_tie)
+        if len(subsequent_word_tie) > 1:
+            subsequent_word = random.choice(subsequent_word_tie)"""
+
+    return "Essa palavra não está no texto."
 
 
 """def frequency_calculation(txt):
@@ -106,4 +166,4 @@ if __name__ == "__main__":
     print(busca)
 
     # frequency_calculation(text)
-    frequency_previous(text, list_words)
+    frequency(text)
