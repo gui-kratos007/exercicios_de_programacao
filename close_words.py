@@ -58,21 +58,26 @@ def frequency(txt):
                 previous_word = words[j - 1]
                 subsequent_word = words[j + 1]
 
+                # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in previous:
                     previous[previous_word] += 1
+                # Se a palavra não estiver no dict das anteriores, adiciona ela e coloque seu valor como 1.
                 else:
                     previous[previous_word] = 1
 
+                # Se a palavra já estiver no dict das posteriores, adiciona mais 1 ao seu valor
                 if subsequent_word in subsequent:
                     subsequent[subsequent_word] += 1
+                # Se a palavra não estiver no dict das posteriores, adiciona ela e coloque seu valor como 1.
                 else:
                     subsequent[subsequent_word] = 1
 
         print()
         print("Palavras anteriores à que você escolheu e sua frequência de aparições: ")
         print(previous)
+        print()
         print("Palavras posteriores à que você escreveu e sua frequência de aparições: ")
-        print(subsequent)
+        print(subsequent, "\n")
 
         # Encontra a(s) palavra(s) mais frequente(s)
         previous_word = max(previous, key=lambda k: previous[k])
@@ -81,12 +86,20 @@ def frequency(txt):
         # print(subsequent_word)
 
         total_itens_previous = sum(previous.values())
-        for l in previous.values():
-            percentage_value = (l / total_itens_previous) * 100
-            for n in previous:
-                if n == l:
+        print("Porcentagem da frequencia dos anteriores: \n")
+        for item in previous:
+            percentage_value = (previous.get(item, 0) / total_itens_previous) * 100
+            print(item, "(", percentage_value, "%) \n")
+            """for n, item in enumerate(previous):
+                if item == l:
                     previous_name = previous[n]
-                    print(previous_name, percentage_value, "%")
+                    print(previous_name, percentage_value, "%")"""
+
+        total_itens_subsequent = sum(subsequent.values())
+        print("Porcentagem da frequencia dos posteriores: \n")
+        for item in subsequent:
+            percentage_value = (subsequent.get(item, 0) / total_itens_subsequent) * 100
+            print(item, "(", percentage_value, "%) \n")
 
         # Verifica se há empate de palavras mais frequentes
         previous_word_tie = [word for word in previous if previous[word] == previous[previous_word]]
@@ -100,43 +113,32 @@ def frequency(txt):
         print()
         print("Lista das mais frequentes anteriores:")
         print(subsequent_word_tie)
+        print()
 
-        """percentage_previous = """
+        if len(previous_word_tie) > 0:
+            imediate_previous = desempate(previous_word_tie)
+        if len(subsequent_word_tie) > 0:
+            imediate_subsequent = desempate(subsequent_word_tie)
 
-        """# usa uma função da lib random para escolher aleatoriamente entre os mais frequentes.
-        if len(previous_word_tie) > 1:
-            previous_word = random.choice(previous_word_tie)
-        if len(subsequent_word_tie) > 1:
-            subsequent_word = random.choice(subsequent_word_tie)"""
-
-    return "Essa palavra não está no texto."
+        return print(f"{imediate_previous} {word} {imediate_subsequent}")
 
 
-"""def frequency_calculation(txt):
-    words = text_clean(txt).split()
-    word = input("digite a palavra que quer pesquisar: ")
-    previous_frequency = {}
-    subsequent_frequency = {}
+def desempate(lista):
+    # Use a posição de memória da lista como semente
+    seed = id(lista)  # Obtém o identificador único da lista como "semente"
 
-    for i, item in enumerate(words):
-        if item == word:
-            if i > 0:
-                previous_word = words[i - 1]
-                previous_frequency[previous_word] = previous_word.get(previous_word, 0) + 1
-                print(f"a frequencia dessa palavra é: {previous_frequency}")
-            if i < len(words) - 1:
-                subsequent_word = words[i + 1]
-                subsequent_frequency[subsequent_word] = subsequent_frequency.get(subsequent_word, 0) + 1
-                print(f"a frequencia dessa palavra é: {subsequent_frequency}")
+    # Use o último dígito do identificador como semente
+    seed = int(str(seed)[-1])
 
-    total_previous = sum(previous_frequency.values())
-    total_subsequent = sum(subsequent_frequency.values())
+    # Calcule um índice "aleatório" usando a semente
+    tamanho = len(lista)
+    indice = seed % tamanho  # O índice é calculado usando o último dígito do identificador e o tamanho da lista
 
-    percentage_previous = {word: (freq / total_previous) * 100 for word, freq in previous_frequency.items()}
-    percentage_subsequent = {word: (freq / total_subsequent) * 100 for word, freq in subsequent_frequency.items()}
+    # Retorne o item correspondente ao índice
+    escolha = lista[indice]  # Retorna o item na lista correspondente ao índice
 
-    return percentage_previous, percentage_subsequent
-"""
+    return escolha
+
 
 if __name__ == "__main__":
     path = input("Entre com o path do arquivo que deseja processar: ")
