@@ -40,6 +40,42 @@ def search_word(txt):
     return "essa palavra não está no texto"
 
 
+def print_percentage(dict1, dict2):
+    total_itens = sum(dict1.values())
+    total_itens2 = sum(dict2.values())
+    print("Porcentagem da frequencia dos anteriores: \n")
+    for item in dict1:
+        percentage_value = (dict1.get(item, 0) / total_itens) * 100
+        print(item, "(", percentage_value, "%) \n")
+    print("Porcentagem da frequencia dos posteriores: \n")
+    for item in dict2:
+        percentage_value = (dict2.get(item, 0) / total_itens2) * 100
+        print(item, "(", percentage_value, "%) \n")
+    return 0
+
+
+def desempate(lista):
+    escolha = random.choice(lista)
+    return escolha
+
+
+def print_most_commons(lista1, lista2, word):
+    if len(lista1) > 1 and len(lista2) > 1:
+        imediate_previous = desempate(lista1)
+        imediate_subsequent = desempate(lista2)
+        return print(f"{imediate_previous} {word} {imediate_subsequent}")
+    elif len(lista1) > 1 > len(lista2):
+        imediate_previous = desempate(lista1)
+        imediate_subsequent = lista2[0]
+        return print(f"{imediate_previous} {word} {imediate_subsequent}")
+    elif len(lista1) < 1 < len(lista2):
+        imediate_previous = lista1[0]
+        imediate_subsequent = desempate(lista2)
+        return print(f"{imediate_previous} {word} {imediate_subsequent}")
+    else:
+        return f"{lista1[0]} {word} {lista2[0]}"
+
+
 def frequency(txt):
     words = text_clean(txt).split()
     word = input("digite a palavra que quer pesquisar: ")
@@ -72,34 +108,19 @@ def frequency(txt):
                 else:
                     subsequent[subsequent_word] = 1
 
-        print()
-        print("Palavras anteriores à que você escolheu e sua frequência de aparições: ")
+        print("\nPalavras anteriores à que você escolheu e sua frequência de aparições: ")
         print(previous)
         print()
         print("Palavras posteriores à que você escreveu e sua frequência de aparições: ")
         print(subsequent, "\n")
+
+        print_percentage(previous, subsequent)
 
         # Encontra a(s) palavra(s) mais frequente(s)
         previous_word = max(previous, key=lambda k: previous[k])
         subsequent_word = max(subsequent, key=lambda k: subsequent[k])
         # print(previous_word)
         # print(subsequent_word)
-
-        total_itens_previous = sum(previous.values())
-        print("Porcentagem da frequencia dos anteriores: \n")
-        for item in previous:
-            percentage_value = (previous.get(item, 0) / total_itens_previous) * 100
-            print(item, "(", percentage_value, "%) \n")
-            """for n, item in enumerate(previous):
-                if item == l:
-                    previous_name = previous[n]
-                    print(previous_name, percentage_value, "%")"""
-
-        total_itens_subsequent = sum(subsequent.values())
-        print("Porcentagem da frequencia dos posteriores: \n")
-        for item in subsequent:
-            percentage_value = (subsequent.get(item, 0) / total_itens_subsequent) * 100
-            print(item, "(", percentage_value, "%) \n")
 
         # Verifica se há empate de palavras mais frequentes
         previous_word_tie = [word for word in previous if previous[word] == previous[previous_word]]
@@ -111,33 +132,15 @@ def frequency(txt):
         print("Lista das mais frequentes anteriores:")
         print(previous_word_tie)
         print()
-        print("Lista das mais frequentes anteriores:")
+        print("Lista das mais frequentes posteriores:")
         print(subsequent_word_tie)
         print()
+        print('-' * 150)
+        print()
 
-        if len(previous_word_tie) > 0:
-            imediate_previous = desempate(previous_word_tie)
-        if len(subsequent_word_tie) > 0:
-            imediate_subsequent = desempate(subsequent_word_tie)
-
-        return print(f"{imediate_previous} {word} {imediate_subsequent}")
-
-
-def desempate(lista):
-    # Use a posição de memória da lista como semente
-    seed = id(lista)  # Obtém o identificador único da lista como "semente"
-
-    # Use o último dígito do identificador como semente
-    seed = int(str(seed)[-1])
-
-    # Calcule um índice "aleatório" usando a semente
-    tamanho = len(lista)
-    indice = seed % tamanho  # O índice é calculado usando o último dígito do identificador e o tamanho da lista
-
-    # Retorne o item correspondente ao índice
-    escolha = lista[indice]  # Retorna o item na lista correspondente ao índice
-
-    return escolha
+        print("A frase mais provável que poderá se formar de acordo com a frequência em porcentagem é:")
+        print(print_most_commons(previous_word_tie, subsequent_word_tie, word))
+    return "A palavra que você buscou não está no documento lido."
 
 
 if __name__ == "__main__":
