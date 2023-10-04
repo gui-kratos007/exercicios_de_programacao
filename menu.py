@@ -151,24 +151,24 @@ def print_percentage(dict1, dict2):
     return 0
 
 
-def desempate(lista):
+def desempatar(lista):
     escolha = random.choice(lista)
     return escolha
 
 
 def print_most_commons(lista1, lista2, word):
     if len(lista1) > 1 and len(lista2) > 1:
-        imediate_previous = desempate(lista1)
-        imediate_subsequent = desempate(lista2)
-        return print(f"{imediate_previous} {word} {imediate_subsequent}")
-    elif len(lista1) > 1 > len(lista2):
-        imediate_previous = desempate(lista1)
-        imediate_subsequent = lista2[0]
-        return print(f"{imediate_previous} {word} {imediate_subsequent}")
-    elif len(lista1) < 1 < len(lista2):
-        imediate_previous = lista1[0]
-        imediate_subsequent = desempate(lista2)
-        return print(f"{imediate_previous} {word} {imediate_subsequent}")
+        immediate_previous = desempatar(lista1)
+        immediate_subsequent = desempatar(lista2)
+        return f"{immediate_previous} {word} {immediate_subsequent}"
+    elif len(lista1) > 1 >= len(lista2):
+        immediate_previous = desempatar(lista1)
+        immediate_subsequent = lista2[0]
+        return f"{immediate_previous} {word} {immediate_subsequent}"
+    elif len(lista1) <= 1 < len(lista2):
+        immediate_previous = lista1[0]
+        immediate_subsequent = desempatar(lista2)
+        return f"{immediate_previous} {word} {immediate_subsequent}"
     else:
         return f"{lista1[0]} {word} {lista2[0]}"
 
@@ -232,14 +232,16 @@ def frequency(txt):
         print(subsequent_word_tie)
         print()
         print('-' * 150)
-        print()
 
-        desempat = desempate(subsequent_word_tie)
-        print(desempat)
+        # desempat = desempatar(subsequent_word_tie)
+        # desempa = desempatar(previous_word_tie)
+        # print(desempa)
+        # print(desempat)
 
-        print("A frase mais provável que poderá se formar de acordo com a frequência em porcentagem é:")
+        print("A frase mais provável que poderá se formar de acordo com a frequência das anteriores e posteriores é:")
         print(print_most_commons(previous_word_tie, subsequent_word_tie, word))
         print()
+    return "A palavra que você buscou não está no documento lido."
 
 
 menu()
