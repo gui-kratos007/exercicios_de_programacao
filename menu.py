@@ -77,20 +77,17 @@ def menu():
                 print()
                 text = get_text(path)
                 print("Escolha uma opção:\n")
-                print("[1] -> Uma casa de distância")
-                print("[2] -> Duas casas de distância")
-                print("[3] -> Voltar ao menu principal")
-                print("[4] -> Sair\n")
+                print("[1] -> Defina uma casa de distância da sua escolha para o programa fazer a busca")
+                print("[2] -> Voltar ao menu principal")
+                print("[3] -> Sair\n")
 
                 option = int(input("Digite a sua opção: "))
 
                 if option == 1:
                     frequency(text)
                 elif option == 2:
-                    frequency_2(text)
-                elif option == 3:
                     continue
-                elif option == 4:
+                elif option == 3:
                     print("Programa finalizado!")
                     break
                 else:
@@ -198,7 +195,8 @@ def print_most_commons(lista1, lista2, word):
 
 def frequency(txt):
     words = text_clean(txt).split()
-    word = input("digite a palavra que quer pesquisar: ")
+    word = input("Digite a palavra que quer pesquisar: ")
+    position = int(input("Digite de qual posição você quer que o programa imprima o termo: "))
     lista_de_busca = []
     previous = {}
     subsequent = {}
@@ -211,8 +209,8 @@ def frequency(txt):
         # Conta a frequencia das palavras anteriores e posteriores
         for j, item in enumerate(words):
             if item == word:
-                previous_word = words[j - 1]
-                subsequent_word = words[j + 1]
+                previous_word = words[j - position]
+                subsequent_word = words[j + position]
 
                 # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in previous:
@@ -252,62 +250,6 @@ def frequency(txt):
         # desempa = desempatar(previous_word_tie)
         # print(desempa)
         # print(desempat)
-
-        print(print_most_commons(previous_word_tie, subsequent_word_tie, word), "\n")
-    return "A palavra que você buscou não está no documento lido."
-
-
-def frequency_2(txt):
-    words = text_clean(txt).split()
-    word = input("digite a palavra que quer pesquisar: ")
-    lista_de_busca = []
-    previous = {}
-    subsequent = {}
-
-    for i, item in enumerate(text_clean(txt).split()):
-        if item == word:
-            lista_de_busca.append(i)
-
-    if len(lista_de_busca) > 0:
-        # Conta a frequencia das palavras anteriores e posteriores
-        for j, item in enumerate(words):
-            if item == word:
-                previous_word = words[j - 2]
-                subsequent_word = words[j + 2]
-
-                # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
-                if previous_word in previous:
-                    previous[previous_word] += 1
-                # Se a palavra não estiver no dict das anteriores, adiciona ela e coloque seu valor como 1.
-                else:
-                    previous[previous_word] = 1
-
-                # Se a palavra já estiver no dict das posteriores, adiciona mais 1 ao seu valor
-                if subsequent_word in subsequent:
-                    subsequent[subsequent_word] += 1
-                # Se a palavra não estiver no dict das posteriores, adiciona ela e coloque seu valor como 1.
-                else:
-                    subsequent[subsequent_word] = 1
-
-        print_percentage(previous, subsequent)
-
-        # Encontra a(s) palavra(s) mais frequente(s)
-        previous_word = max(previous, key=lambda k: previous[k])
-        subsequent_word = max(subsequent, key=lambda k: subsequent[k])
-        # print(previous_word)
-        # print(subsequent_word)
-
-        # Verifica se há empate de palavras mais frequentes
-        previous_word_tie = [word for word in previous if previous[word] == previous[previous_word]]
-        subsequent_word_tie = [word for word in subsequent if subsequent[word] == subsequent[subsequent_word]]
-        print('-' * 150)
-        print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
-              "uma é porque estão empatadas na frequencia. \n")
-        print("Lista das mais frequentes anteriores:")
-        print(previous_word_tie, "\n")
-        print("Lista das mais frequentes posteriores:")
-        print(subsequent_word_tie, "\n")
-        print('-' * 150, "\n")
 
         print(print_most_commons(previous_word_tie, subsequent_word_tie, word), "\n")
     return "A palavra que você buscou não está no documento lido."
