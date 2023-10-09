@@ -162,7 +162,8 @@ def frequency(txt):
         # print(desempat)
 
         print(print_most_commons(previous_word_tie, subsequent_word_tie, word), "\n")
-    return "A palavra que você buscou não está no documento lido."
+
+    return print("A palavra que você buscou não está no documento lido.")
 
 
 def frequency_2(txt):
