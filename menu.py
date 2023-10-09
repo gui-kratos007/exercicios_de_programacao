@@ -196,16 +196,17 @@ def print_most_commons(lista1, lista2, word):
 def frequency(txt):
     words = text_clean(txt).split()
     word = input("Digite a palavra que quer pesquisar: ")
-    position = int(input("Digite de qual posição você quer que o programa imprima o termo: "))
     lista_de_busca = []
     previous = {}
     subsequent = {}
 
-    for i, item in enumerate(text_clean(txt).split()):
+    for i, item in enumerate(words):
         if item == word:
             lista_de_busca.append(i)
 
     if len(lista_de_busca) > 0:
+        position = int(input("Digite de qual posição você quer que o programa imprima o termo: "))
+
         # Conta a frequencia das palavras anteriores e posteriores
         for j, item in enumerate(words):
             if item == word:
@@ -252,7 +253,8 @@ def frequency(txt):
         # print(desempat)
 
         print(print_most_commons(previous_word_tie, subsequent_word_tie, word), "\n")
-    return "A palavra que você buscou não está no documento lido."
+
+    return print("A palavra que você buscou não está no documento lido.")
 
 
 menu()
