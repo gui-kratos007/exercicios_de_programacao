@@ -1,6 +1,11 @@
 import random
 
 def get_text(path):
+    """
+    Esta função lê o arquivo e retorna o seu conteúdo, mas caso não exista ele retorna uma mensagem de erro.
+    :param path: caminho ou path para o documento a ser lido
+    :return: mensagem de erro
+    """
     with open(path, 'r', encoding="utf-8") as file:
         dados = file.read()
         if dados:
@@ -21,7 +26,7 @@ def text_clean(text):
 
 def get_count(item):
     """
-    Obtém o segundo elemento (contagem) de cada itém.
+    Obtém o segundo elemento (contagem) de cada item.
 
     :param item: Uma tupla ou lista de dois elementos onde o segundo elemento é a contagem.
     :return: A contagem (segundo elemento) do item.
@@ -30,6 +35,12 @@ def get_count(item):
 
 
 def search_word(txt):
+    """
+    Pesquisa a palavra escolhida pelo usuário e retorna uma lista com os indices de todas
+    as aparições dessa palavra no texto
+    :param txt: texto do documento
+    :return: mensagem de erro
+    """
     word = input("digite a palavra que quer pesquisar: ")
     lista_de_busca = []
     for i, item in enumerate(text_clean(txt).split()):
@@ -41,27 +52,48 @@ def search_word(txt):
 
 
 def print_percentage(dict1, dict2):
+    """
+    imprime as porcentagens de aparições das palavras de cada dict
+    :param dict1: dicionário das palavras que aparecem antes da escolhida pelo usuário
+    :param dict2: dicionário das palavras que aparecem depois da escolhida pelo usuário
+    :return: 0, ou seja, indica ao SO que o programa foi bem sucedido
+    """
     total_itens = sum(dict1.values())
     total_itens2 = sum(dict2.values())
     print('-' * 150)
     print("Porcentagem da frequencia dos anteriores: \n")
     for item in dict1:
-        percentage_value = (dict1.get(item, 0) / total_itens) * 100
+        ocurrences = dict1.get(item, 0)
+        percentage_value = (ocurrences / total_itens) * 100
         print(item, "(", percentage_value, "%) \n")
     print('-' * 150)
     print("Porcentagem da frequencia dos posteriores: \n")
     for item in dict2:
-        percentage_value = (dict2.get(item, 0) / total_itens2) * 100
+        ocurrences = dict2.get(item, 0)
+        percentage_value = (ocurrences / total_itens2) * 100
         print(item, "(", percentage_value, "%) \n")
     return 0
 
 
 def desempatar(lista):
+    """
+    escolhe um item aleatório da lista
+    :param lista: lista de palavras a serem sorteadas
+    :return: a escolha, ou seja, o item que foi sorteado
+    """
     escolha = random.choice(lista)
     return escolha
 
 
-def print_most_commons(lista1, lista2, word):
+"""def print_most_commons(lista1, lista2, word):
+    ""
+    imprime a frase mais provável
+    :param lista1: lista das anteriores mais freuquentes
+    :param lista2: lista das posteriores mais freuquentes
+    :param word: palavra escolhida pelo usuário
+    :return: frase mais provável
+    ""
+    print("A frase mais provável é: ")
     if len(lista1) > 1 and len(lista2) > 1:
         immediate_previous = desempatar(lista1)
         immediate_subsequent = desempatar(lista2)
@@ -75,17 +107,65 @@ def print_most_commons(lista1, lista2, word):
         immediate_subsequent = desempatar(lista2)
         return f"{immediate_previous} {word} {immediate_subsequent}"
     else:
-        return f"{lista1[0]} {word} {lista2[0]}"
+        return f"{lista1[0]} {word} {lista2[0]}" """
 
 
-def frequency(txt):
+def check_tie(dict1, dict2, lista):
+    """
+    Encontra as palavras mais frequentes e ve se tem empate de aparições
+    :param dict1: dict das palavras anteriores
+    :param dict2: dict das palavras posteriores
+    :return: mensagem de erro
+    """
+    # Encontra a(s) palavra(s) mais frequente(s)
+    previous_word = max(dict1, key=lambda k: dict1[k])
+    subsequent_word = max(dict2, key=lambda k: dict2[k])
+
+    # Verifica se há empate de palavras mais frequentes
+    previous_word_tie = [word for word in dict1 if dict1[word] == dict1[previous_word]]
+    subsequent_word_tie = [word for word in dict2 if dict2[word] == dict2[subsequent_word]]
+    if len(lista) > 0:
+        print('-' * 150)
+        print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
+              "uma é porque estão empatadas na frequencia.\n")
+        print("Lista das mais frequentes anteriores:")
+        print(previous_word_tie, "\n")
+        print("Lista das mais frequentes posteriores:")
+        print(subsequent_word_tie, "\n")
+        print('-' * 150, "\n")
+    return "não tem nenhuma palavra nas listas"
+
+
+def frequency(dict1, dict2, lista):
+    """
+    Imprime a frequencia de aparições no texto das palavras anteriores e posteriores à escolhida pelo usuário
+    :param dict1: dict de palavras anteriores à escolhida pelo usuário
+    :param dict2: dict de palavras posteriores à escolhida pelo usuário
+    :param lista: lista de indices da palavra escolhida pelo usuário
+    :return: mensagem de erro
+    """
+
+    if len(lista) > 0:
+        print("\nPalavras anteriores à que você escolheu e sua frequência de aparições: ")
+        print(dict1)
+        print("\nPalavras posteriores à que você escreveu e sua frequência de aparições: ")
+        print(dict2, "\n")
+    return "não tem palavras nas listas"
+
+
+def show_all(txt):
+    """
+    Calcula a frequencia de aparições das palavras
+    :param txt: texto do documento
+    :return: mensagem de erro
+    """
     words = text_clean(txt).split()
     word = input("digite a palavra que quer pesquisar: ")
     lista_de_busca = []
     previous = {}
     subsequent = {}
 
-    for i, item in enumerate(text_clean(txt).split()):
+    for i, item in enumerate(words):
         if item == word:
             lista_de_busca.append(i)
 
@@ -98,7 +178,7 @@ def frequency(txt):
 
                 # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in previous:
-                    previous[previous_word] += 1
+                   previous[previous_word] += 1
                 # Se a palavra não estiver no dict das anteriores, adiciona ela e coloque seu valor como 1.
                 else:
                     previous[previous_word] = 1
@@ -110,43 +190,9 @@ def frequency(txt):
                 else:
                     subsequent[subsequent_word] = 1
 
-        print("\nPalavras anteriores à que você escolheu e sua frequência de aparições: ")
-        print(previous)
-        print("\nPalavras posteriores à que você escreveu e sua frequência de aparições: ")
-        print(subsequent, "\n")
-
-        print_percentage(previous, subsequent)
-
-        # Encontra a(s) palavra(s) mais frequente(s)
-        previous_word = max(previous, key=lambda k: previous[k])
-        subsequent_word = max(subsequent, key=lambda k: subsequent[k])
-        # print(previous_word)
-        # print(subsequent_word)
-
-        # Verifica se há empate de palavras mais frequentes
-        previous_word_tie = [word for word in previous if previous[word] == previous[previous_word]]
-        subsequent_word_tie = [word for word in subsequent if subsequent[word] == subsequent[subsequent_word]]
-        print('-' * 150)
-        print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
-              "uma é porque estão empatadas na frequencia.")
-        print()
-        print("Lista das mais frequentes anteriores:")
-        print(previous_word_tie)
-        print()
-        print("Lista das mais frequentes posteriores:")
-        print(subsequent_word_tie)
-        print()
-        print('-' * 150)
-        print()
-
-        # desempat = desempatar(subsequent_word_tie)
-        # desempa = desempatar(previous_word_tie)
-        # print(desempa)
-        # print(desempat)
-
-        print("A frase mais provável que poderá se formar de acordo com a frequência das anteriores e posteriores é:")
-        print(print_most_commons(previous_word_tie, subsequent_word_tie, word))
-        print()
+    frequency(previous, subsequent, lista_de_busca)
+    print_percentage(previous, subsequent)
+    check_tie(previous, subsequent, lista_de_busca)
     return "A palavra que você buscou não está no documento lido."
 
 
@@ -178,4 +224,4 @@ if __name__ == "__main__":
     print(busca)
 
     # frequency_calculation(text)
-    frequency(text)
+    show_all(text)
