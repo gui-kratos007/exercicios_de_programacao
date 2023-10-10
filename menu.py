@@ -18,11 +18,7 @@ def menu():
             answer = int(input("Digite sua opção: "))
             if answer == 1:
                 path = input("Entre com o path do arquivo que deseja processar: ")
-                text = get_text(path)
-                print()
-                print("O arquivo foi carregado, veja abaixo o seu conteúdo: ")
-                print(text)
-                print()
+                option_1(path)
             elif answer == 2:
                 path = input("Entre com o path do arquivo que deseja processar: ")
                 text = get_text(path)
@@ -83,6 +79,17 @@ def menu():
                 print("Número inválido, tente novamente inserindo um válido.")
         except ValueError:
             print("Você não digitou um número inteiro, tente novamente.")
+
+def option_1(path):
+    """
+    lê o arquivo e retorna o conteúdo dele
+    :param path: caminho do arquivo
+    :return: conteúdo do arquivo
+    """
+    text = get_text(path)
+    print("\n O arquivo foi carregado, veja abaixo o seu conteúdo: ")
+    return print(text)
+
 
 
 def get_text(path):
