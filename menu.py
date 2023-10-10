@@ -139,7 +139,7 @@ def search_word(txt):
 def ascending_alphabetical_order(list_words):
     """
     ordena as palavras em ordem alfabética crescente
-    :param list_words: lista de palavras do texto
+    :param list_words: listaa de palavras do texto
     :return: as palavras ordenadas em ordem alfabética crescente
     """
     word_sorted = [word for word in set(list_words)]
