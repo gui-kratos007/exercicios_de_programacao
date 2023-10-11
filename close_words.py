@@ -130,27 +130,21 @@ def print_most_commons(lista1, lista2, word):
     :return: frase mais provável
     """
     print("A frase mais provável é: ")
-    if len(lista1) > 1 and len(lista2) > 1:
-        immediate_previous = desempatar(lista1)
-        immediate_subsequent = desempatar(lista2)
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    elif len(lista1) > 1 >= len(lista2):
-        immediate_previous = desempatar(lista1)
-        immediate_subsequent = lista2[0]
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    elif len(lista1) <= 1 < len(lista2):
-        immediate_previous = lista1[0]
-        immediate_subsequent = desempatar(lista2)
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    else:
-        return f"{lista1[0]} {word} {lista2[0]}"
+    immediate_previous = desempatar(lista1)
+    immediate_subsequent = desempatar(lista2)
+
+    return print(f"{immediate_previous} {word} {immediate_subsequent}")
+
+    # if len(lista1) < 1 and len(lista2) < 1:
+        # return f"{lista1[0]} {word} {lista2[0]}
 
 
-def check_tie(dict1, dict2, lista):
+def check_tie(dict1, dict2, lista, word=None):
     """
     Encontra as palavras mais frequentes e ve se tem empate de aparições
     :param dict1: dict das palavras anteriores
     :param dict2: dict das palavras posteriores
+    :param lista: lista de indices da palavra escolhida pelo usuário
     :return: mensagem de erro
     """
     # Encontra a(s) palavra(s) mais frequente(s)
@@ -168,6 +162,9 @@ def check_tie(dict1, dict2, lista):
         print(previous_word_tie, "\n")
         print("Lista das mais frequentes posteriores:")
         print(subsequent_word_tie, "\n")
+        if word:
+            print_most_commons(previous_word_tie, subsequent_word_tie, word)
+        return previous_word_tie, subsequent_word_tie
     return "não tem nenhuma palavra nas listas"
 
 
@@ -253,7 +250,7 @@ def show_all(txt):
     add_itens_in_dicts(list_add, previous, subsequent, word, words)
     frequency(previous, subsequent, lista_de_busca)
     print_percentage(previous, subsequent)
-    check_tie(previous, subsequent, lista_de_busca)
+    check_tie(previous, subsequent, lista_de_busca, word)
     return "A palavra que você buscou não está no documento lido."
 
 
