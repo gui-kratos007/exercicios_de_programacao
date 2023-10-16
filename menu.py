@@ -202,7 +202,7 @@ def search_word(txt):
 
 def ascending_alphabetical_order(list_words):
     """
-    ordena as palavras em ordem alfabética crescente
+    Ordena as palavras em ordem alfabética crescente
     :param list_words: lista de palavras do texto
     :return: as palavras ordenadas em ordem alfabética crescente
     """
@@ -221,6 +221,12 @@ def descending_alphabetical_order(list_words):
 
 
 def calculate_percentage(ocurrences, total):
+    """
+    Uma fórmula para calcular porcentagem
+    :param ocurrences: total de ocorrencias de um certo valor no meio de outros
+    :param total: total de valores possíveis
+    :return: retorna o valor calculado da porcentagem
+    """
     percentage_value = (ocurrences / total) * 100
     return percentage_value
 
@@ -267,28 +273,25 @@ def print_most_commons(lista1, lista2, word):
     :param word: palavra escolhida pelo usuário
     :return: frase mais provável
     """
-    print("A frase mais provável é: ")
-    if len(lista1) > 1 and len(lista2) > 1:
-        immediate_previous = desempatar(lista1)
-        immediate_subsequent = desempatar(lista2)
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    elif len(lista1) > 1 >= len(lista2):
-        immediate_previous = desempatar(lista1)
-        immediate_subsequent = lista2[0]
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    elif len(lista1) <= 1 < len(lista2):
-        immediate_previous = lista1[0]
-        immediate_subsequent = desempatar(lista2)
-        return f"{immediate_previous} {word} {immediate_subsequent}"
-    else:
-        return f"{lista1[0]} {word} {lista2[0]}"
+    if word:
+        options = {
+            (True, True): (desempatar(lista1), desempatar(lista2)),
+            (True, False): (desempatar(lista1), lista2[0]),
+            (False, True): (lista1[0], desempatar(lista2)),
+            (False, False): (lista1[0], lista2[0])
+        }
+
+        immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
+
+        return print(f"A frase mais provável é: {immediate_previous} {word} {immediate_subsequent}")
 
 
-def check_tie(dict1, dict2, lista):
+def check_tie(dict1, dict2, lista, word=None):
     """
     Encontra as palavras mais frequentes e ve se tem empate de aparições
     :param dict1: dict das palavras anteriores
     :param dict2: dict das palavras posteriores
+    :param lista: lista de indices da palavra escolhida pelo usuário
     :return: mensagem de erro
     """
     # Encontra a(s) palavra(s) mais frequente(s)
@@ -306,7 +309,9 @@ def check_tie(dict1, dict2, lista):
         print(previous_word_tie, "\n")
         print("Lista das mais frequentes posteriores:")
         print(subsequent_word_tie, "\n")
-    return "não tem nenhuma palavra nas listas"
+        print_most_commons(previous_word_tie, subsequent_word_tie, word)
+        return previous_word_tie, subsequent_word_tie
+    return print("não tem nenhuma palavra nas listas")
 
 
 def frequency(dict1, dict2, lista):
@@ -387,12 +392,14 @@ def show_all(txt):
     previous = {}
     subsequent = {}
 
-    list_add = add_in_list(lista_de_busca, word, words)
-    add_itens_in_dicts(list_add, previous, subsequent, word, words)
-    frequency(previous, subsequent, lista_de_busca)
-    print_percentage(previous, subsequent)
-    check_tie(previous, subsequent, lista_de_busca)
-    return "A palavra que você buscou não está no documento lido."
+    if word in words:
+        list_add = add_in_list(lista_de_busca, word, words)
+        add_itens_in_dicts(list_add, previous, subsequent, word, words)
+        frequency(previous, subsequent, lista_de_busca)
+        print_percentage(previous, subsequent)
+        check_tie(previous, subsequent, lista_de_busca, word)
+        return print("Todas as informações de frequencia foram mostradas acima")
+    return print("A palavra que você buscou não está no documento lido.")
 
 
 menu()

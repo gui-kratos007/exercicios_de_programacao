@@ -129,11 +129,16 @@ def print_most_commons(lista1, lista2, word):
     :param word: palavra escolhida pelo usuário
     :return: frase mais provável
     """
-    print("A frase mais provável é: ")
-    immediate_previous = desempatar(lista1)
-    immediate_subsequent = desempatar(lista2)
+    options = {
+        (True, True): (desempatar(lista1), desempatar(lista2)),
+        (True, False): (desempatar(lista1), lista2[0]),
+        (False, True): (lista1[0], desempatar(lista2)),
+        (False, False): (lista1[0], lista2[0])
+    }
 
-    return print(f"{immediate_previous} {word} {immediate_subsequent}")
+    immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
+
+    return print(f"A frase mais provável é: {immediate_previous} {word} {immediate_subsequent}")
 
     # if len(lista1) < 1 and len(lista2) < 1:
         # return f"{lista1[0]} {word} {lista2[0]}
@@ -162,7 +167,7 @@ def check_tie(dict1, dict2, lista, word=None):
         print(previous_word_tie, "\n")
         print("Lista das mais frequentes posteriores:")
         print(subsequent_word_tie, "\n")
-        if word:
+        if word in lista:
             print_most_commons(previous_word_tie, subsequent_word_tie, word)
         return previous_word_tie, subsequent_word_tie
     return "não tem nenhuma palavra nas listas"
