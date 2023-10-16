@@ -1,143 +1,5 @@
 import random
 
-
-def menu():
-    while True:
-        print("-" * 150)
-        print("Menu interativo")
-        print("-" * 150)
-        print()
-        print("Opções: ")
-        print("[1] -> Carregar arquivo")
-        print("[2] -> Exibir lista")
-        print("[3] -> Buscar palavra")
-        print("[4] -> Buscar palavras próximas mais frequetes")
-        print("[9] -> Sair")
-
-        try:
-            answer = int(input("Digite sua opção: "))
-            path = input("Entre com o path do arquivo que deseja processar: ")
-            if answer == 1:
-                answer_1(path)
-            elif answer == 2:
-                list_the_words(path)
-
-                print("-" * 5, "Escolha uma opção para interagir com essa lista", "-" * 5)
-                print("Opções:")
-                print("[1] -> Ordenar por palavras mais frequentes")
-                print("[2] -> Ordenar por palavras menos frequentes")
-                print("[3] -> Ordem alfabética (crescente)")
-                print("[4] -> Ordem alfabética (decrescente)")
-                print("[5] -> Voltar ao Menu principal")
-                print("[6] -> Sair")
-
-                option = int(input("Digite sua opção: "))
-                print()
-                if option == 1:
-                    option_1(list_the_words(path))
-                elif option == 2:
-                    option_2(list_the_words(path))
-                elif option == 3:
-                    option_3(list_the_words(path))
-                elif option == 4:
-                    option_4(list_the_words(path))
-                elif option == 5:
-                    continue
-                elif option == 6:
-                    print("Programa finalizado!")
-                    break
-                else:
-                    print("Opção inválida. Volte do ínicio e tente novamente com um número válido.")
-                print()
-            elif answer == 3:
-                answer_3(path)
-            elif answer == 4:
-                answer_4(path)
-            elif answer == 9:
-                print("Programa finalizado!")
-                break
-            else:
-                print("Número inválido, tente novamente inserindo um válido.")
-        except ValueError:
-            print("Você não digitou um número inteiro, tente novamente.")
-
-
-def answer_1(path):
-    """
-    lê o arquivo e retorna o conteúdo dele
-    :param path: caminho do arquivo
-    :return: conteúdo do arquivo
-    """
-    text = get_text(path)
-    print("\n O arquivo foi carregado, veja abaixo o seu conteúdo: ")
-    return print(text)
-
-
-def option_1(func):
-    """
-    cria uma lista de palavras com o seu numero de aparições, as ordena e retorna elas ordenadas em ordem decrescente
-    :param func: função da lista de palavras
-    :return: palavras seguidas da sua quantidade de aparições em ordem decrescente de aparições.
-    """
-    words_count = [[word, func.count(word)] for word in set(func)]
-    order_words = sorted(words_count, key=get_count, reverse=True)
-    for word, count in order_words:
-        print(f"{word} ({count})")
-
-
-def option_2(func):
-    """
-    cria uma lista de palavras com o seu numero de aparições, as ordena e retorna elas ordenadas em ordem crescente
-    :param func: função da lista de palavras
-    :return: palavras seguidas da sua quantidade de aparições em ordem crescente de aparições.
-    """
-    words_count = [[word, func.count(word)] for word in set(func)]
-    order_words = sorted(words_count, key=get_count)
-    for word, count in order_words:
-        print(f"{word} ({count})")
-
-
-def option_3(func):
-    """
-    coloca a lista de palavras em ordem alfabética crescente e retorna a impressão delas
-    :param func: lista de palavras
-    :return: lista de palavras em ordem alfabética crescente
-    """
-    ordem_alfabetica_crescente = ascending_alphabetical_order(func)
-    return print(ordem_alfabetica_crescente)
-
-
-def option_4(func):
-    """
-    coloca a lista de palavras em ordem alfabética decrescente e retorna a impressão delas
-    :param func: lista de palavras
-    :return: lista de palavras em ordem alfabética decrescente
-    """
-    ordem_alfabetica_decrescente = descending_alphabetical_order(func)
-    return print(ordem_alfabetica_decrescente)
-
-
-def answer_3(path):
-    """
-    faz uma pesquisa da palavra que o usuário escolher e retorna o(s) índice(s) que ela aparece no texto
-    :param path: caminho do arquivo
-    :return: indice(s) da palavra escolhida
-    """
-    text = get_text(path)
-    search = search_word(text)
-    return print("\n", search, "\n")
-
-
-def answer_4(path):
-    """
-    pega o texto e retorna todas os dados de frequencia da palavra que o usuário escolheu
-    :param path: caminho do arquivo
-    :return: todos os dados da frequencia da palavra que o usuário escolheu.
-    """
-    text = get_text(path)
-    return show_all(text)
-
-
 def list_the_words(path):
     """
     lê o texto e retorna a lista de palavras dele
@@ -202,7 +64,7 @@ def search_word(txt):
 
 def ascending_alphabetical_order(list_words):
     """
-    Ordena as palavras em ordem alfabética crescente
+    ordena as palavras em ordem alfabética crescente
     :param list_words: lista de palavras do texto
     :return: as palavras ordenadas em ordem alfabética crescente
     """
@@ -221,12 +83,6 @@ def descending_alphabetical_order(list_words):
 
 
 def calculate_percentage(ocurrences, total):
-    """
-    Uma fórmula para calcular porcentagem
-    :param ocurrences: total de ocorrencias de um certo valor no meio de outros
-    :param total: total de valores possíveis
-    :return: retorna o valor calculado da porcentagem
-    """
     percentage_value = (ocurrences / total) * 100
     return percentage_value
 
@@ -273,17 +129,19 @@ def print_most_commons(lista1, lista2, word):
     :param word: palavra escolhida pelo usuário
     :return: frase mais provável
     """
-    if word:
-        options = {
-            (True, True): (desempatar(lista1), desempatar(lista2)),
-            (True, False): (desempatar(lista1), lista2[0]),
-            (False, True): (lista1[0], desempatar(lista2)),
-            (False, False): (lista1[0], lista2[0])
-        }
+    options = {
+        (True, True): (desempatar(lista1), desempatar(lista2)),
+        (True, False): (desempatar(lista1), lista2[0]),
+        (False, True): (lista1[0], desempatar(lista2)),
+        (False, False): (lista1[0], lista2[0])
+    }
 
-        immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
+    immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
 
-        return print(f"A frase mais provável é: {immediate_previous} {word} {immediate_subsequent}")
+    return print(f"A frase mais provável é: {immediate_previous} {word} {immediate_subsequent}")
+
+    # if len(lista1) < 1 and len(lista2) < 1:
+        # return f"{lista1[0]} {word} {lista2[0]}
 
 
 def check_tie(dict1, dict2, lista, word=None):
@@ -309,9 +167,10 @@ def check_tie(dict1, dict2, lista, word=None):
         print(previous_word_tie, "\n")
         print("Lista das mais frequentes posteriores:")
         print(subsequent_word_tie, "\n")
-        print_most_commons(previous_word_tie, subsequent_word_tie, word)
+        if word in lista:
+            print_most_commons(previous_word_tie, subsequent_word_tie, word)
         return previous_word_tie, subsequent_word_tie
-    return print("não tem nenhuma palavra nas listas")
+    return "não tem nenhuma palavra nas listas"
 
 
 def frequency(dict1, dict2, lista):
@@ -392,14 +251,40 @@ def show_all(txt):
     previous = {}
     subsequent = {}
 
-    if word in words:
-        list_add = add_in_list(lista_de_busca, word, words)
-        add_itens_in_dicts(list_add, previous, subsequent, word, words)
-        frequency(previous, subsequent, lista_de_busca)
-        print_percentage(previous, subsequent)
-        check_tie(previous, subsequent, lista_de_busca, word)
-        return print("Todas as informações de frequencia foram mostradas acima")
-    return print("A palavra que você buscou não está no documento lido.")
+    list_add = add_in_list(lista_de_busca, word, words)
+    add_itens_in_dicts(list_add, previous, subsequent, word, words)
+    frequency(previous, subsequent, lista_de_busca)
+    print_percentage(previous, subsequent)
+    check_tie(previous, subsequent, lista_de_busca, word)
+    return "A palavra que você buscou não está no documento lido."
 
 
-menu()
+if __name__ == "__main__":
+    path = input("Entre com o path do arquivo que deseja processar: ")
+    text = get_text(path)
+
+    # print(text.split()[7:22])
+
+    # Divide a string em palavras
+    list_words = text_clean(text).split()
+    # print(set(list_words))
+
+    # Cria um lista de listas para contar as palavras
+    words_count = [[word, list_words.count(word)] for word in set(list_words)]
+    # print(words_count)
+
+    # Ordena as palavras em ordem decrescente de contagem sem lambda
+    order_words = sorted(words_count, key=get_count, reverse=True)
+    # print(order_words)
+
+    # Imprime as palavras e as suas contagens em ordem decrescente
+    for word, count in order_words:
+        print(f"{word} ({count})")
+
+    # busca os índices das palavras iguais as escolhidas pelo usuário
+    busca = search_word(text)
+    # imprime os índices das palavras iguais as escolhidas pelo usuário
+    print(busca)
+
+    # frequency_calculation(text)
+    show_all(text)
