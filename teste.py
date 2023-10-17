@@ -455,9 +455,9 @@ def show_all(txt):
         add_itens_in_dicts(list_add, previous, subsequent, word, words)
         frequency(previous, subsequent, lista_de_busca)
         print_percentage(previous, subsequent)
-        check_tie(previous, subsequent, lista_de_busca, word)
+        check_tie(previous, subsequent, lista_de_busca)
 
-        lista1, lista2 = check_tie(previous, subsequent, lista_de_busca, word)
+        lista1, lista2 = check_tie(previous, subsequent, lista_de_busca)
         check_print_tie(lista1, lista2, word)
         return print("Todas as informações de frequencia foram mostradas acima")
     return print("A palavra que você buscou não está no documento lido.")
