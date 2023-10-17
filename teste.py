@@ -271,10 +271,9 @@ def desempatar(lista):
     return escolha
 
 
-def print_phrase(func, lista1, lista2):
+def print_phrase(frase, lista1, lista2):
     resp = 0
     while resp < 1:
-        frase = func
         palavras = frase.split()
         palavra_inicial = palavras[0]
         palavra_final = palavras[-1]
@@ -292,7 +291,7 @@ def print_phrase(func, lista1, lista2):
             else:
                 nova_frase = f"{anterior} {frase} {posterior}"
                 print(nova_frase)
-                func = nova_frase
+                frase = nova_frase
         except ValueError:
             print("Digite um valor inteiro positivo")
 
@@ -333,30 +332,7 @@ def get_subsequent(lista2, word):
     return print("Essa palavra não esta no documento")
 
 
-def print_most_commons(lista1, lista2, word):
-    """"
-    imprime a frase mais provável
-    :param lista1: lista das anteriores mais frequentes
-    :param lista2: lista das posteriores mais frequentes
-    :param word: palavra escolhida pelo usuário
-    :return: frase mais provável
-    """
-    frase_comum = None
-    if word:
-        options = {
-            (True, True): (desempatar(lista1), desempatar(lista2)),
-            (True, False): (desempatar(lista1), lista2[0]),
-            (False, True): (lista1[0], desempatar(lista2)),
-            (False, False): (lista1[0], lista2[0])
-        }
-
-        immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
-        print("A frase mais provável é: ")
-        frase_comum = f"{immediate_previous} {word} {immediate_subsequent}"
-    return frase_comum
-
-
-def check_tie(dict1, dict2, lista,  word=None):
+def check_tie(dict1, dict2, lista):
     """
         Encontra as palavras mais frequentes e ve se tem empate de aparições
         :param dict1: dict das palavras anteriores
@@ -384,7 +360,9 @@ def check_print_tie(lista1, lista2, word):
     print(lista1, "\n")
     print("Lista das mais frequentes posteriores:")
     print(lista2, "\n")
-    comuns = print_most_commons(lista1, lista2, word)
+    anterior = get_previous(lista1, word)
+    posterior = get_subsequent(lista2, word)
+    comuns = f"{anterior} {word} {posterior}"
     if comuns:
         print(comuns)
         print_phrase(comuns, lista1, lista2)
