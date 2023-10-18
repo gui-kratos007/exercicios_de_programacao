@@ -54,7 +54,7 @@ def menu():
             elif answer == 4:
                 text = get_text(path)
                 print("Escolha uma opção:\n")
-                print("[1] -> Defina uma casa de distância da sua escolha para o programa fazer a busca")
+                print("[1] -> Ver frequencia das palavras e frase mais provável")
                 print("[2] -> Voltar ao menu principal")
                 print("[3] -> Sair\n")
 
@@ -271,8 +271,9 @@ def desempatar(lista):
     return escolha
 
 
-def print_phrase(frase, lista1, lista2):
+def print_phrase(lista1, lista2, dict1, dict2, word):
     resp = 0
+    frase = check_print_tie(lista1, lista2, word)
     while resp < 1:
         palavras = frase.split()
         palavra_inicial = palavras[0]
@@ -280,18 +281,20 @@ def print_phrase(frase, lista1, lista2):
         print(f"{50 * 'X'}", palavra_inicial)
         print(f"{50 * 'X'}", palavra_final)
 
-        anterior = get_previous(lista1, frase)
-        posterior = get_subsequent(lista2, frase)
+        frase_list = [frase.split()]
+        anterior = get_previous_in_phrase(frase_list[0], dict1, dict2, frase_list)
+        posterior = get_subsequent_in_phrase(frase_list[-1], dict1, dict2, frase_list)
+        nova_frase = f"{anterior} {frase} {posterior}"
+        frase = nova_frase
+
         # posterior = desempatar(lista2[palavra_final])
         try:
             resp = int(input("Digite 0 para continuar, e qualquer outro valor para sair: "))
             if resp != 0:
-                print(f"{anterior} {frase} {posterior}")
+                print(nova_frase)
                 break
             else:
-                nova_frase = f"{anterior} {frase} {posterior}"
                 print(nova_frase)
-                frase = nova_frase
         except ValueError:
             print("Digite um valor inteiro positivo")
 
@@ -314,6 +317,29 @@ def get_previous(lista1, word):
     return print("Essa palavra não esta no documento")
 
 
+def get_previous_in_phrase(word, dict1, dict2, lista):
+    """
+
+    :param word:
+    :param dict1:
+    :param dict2:
+    :param lista:
+    :return:
+    """
+    check_tie(dict1, dict2, lista)
+    lista1, lista2 = check_tie(dict1, dict2, lista)
+
+    if word:
+        options = {
+            (True): (desempatar(lista1)),
+            (False): (lista1[0])
+        }
+
+        immediate_previous = options[len(lista1) > 1]
+        return immediate_previous
+    return print("Essa palavra não esta no documento")
+
+
 def get_subsequent(lista2, word):
     """
 
@@ -325,6 +351,29 @@ def get_subsequent(lista2, word):
         options = {
             (True): (desempatar(lista2)),
             (False): (lista2[0])
+        }
+
+        immediate_subsequent = options[len(lista2) > 1]
+        return immediate_subsequent
+    return print("Essa palavra não esta no documento")
+
+
+def get_subsequent_in_phrase(word, dict1, dict2, lista):
+    """
+
+    :param word:
+    :param dict1:
+    :param dict2:
+    :param lista:
+    :return:
+    """
+    check_tie(dict1, dict2, lista)
+    lista1, lista2 = check_tie(dict1, dict2, lista)
+
+    if word:
+        options = {
+            (True): (desempatar(lista2)),
+            (False): (lista1[0])
         }
 
         immediate_subsequent = options[len(lista2) > 1]
@@ -365,8 +414,7 @@ def check_print_tie(lista1, lista2, word):
     comuns = f"{anterior} {word} {posterior}"
     if comuns:
         print(comuns)
-        print_phrase(comuns, lista1, lista2)
-    return lista1, lista2
+        return comuns
 
 
 def frequency(dict1, dict2, lista):
@@ -413,14 +461,11 @@ def add_itens_in_dicts(func, dict1, dict2, word, words):
     que agora não estará mais vazio, como no início
     """
     if func > 0:
-
-        position = int(input("Digite de qual posição você quer que o programa imprima o termo: "))
-
         # Conta a frequencia das palavras anteriores e posteriores
         for j, item in enumerate(words):
             if item == word:
-                previous_word = words[j - position]
-                subsequent_word = words[j + position]
+                previous_word = words[j - 1]
+                subsequent_word = words[j + 1]
 
                 # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in dict1:
@@ -458,7 +503,7 @@ def show_all(txt):
         check_tie(previous, subsequent, lista_de_busca)
 
         lista1, lista2 = check_tie(previous, subsequent, lista_de_busca)
-        check_print_tie(lista1, lista2, word)
+        print_phrase(lista1, lista2, previous, subsequent, word)
         return print("Todas as informações de frequencia foram mostradas acima")
     return print("A palavra que você buscou não está no documento lido.")
 
