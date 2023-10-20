@@ -373,7 +373,6 @@ def get_subsequent_in_phrase(word, words):
     digitada pelo usuário, já que a palavra que deveria ser o parametro dessa vez não é a digitada pelo
     usuário antes. Depois disso ela realiza a função get_subsequent para a palavra final da frase.
     :param word: palavra final da frase
-    :param lista: lista dos índices das vezes em que a palavra final da frase aparece no documento lido
     :param words: todas as palavras presentes no texto
     :return: a função get_subsequent, ou seja, palavra posterior mais frequente ou mensagem de erro
     """
