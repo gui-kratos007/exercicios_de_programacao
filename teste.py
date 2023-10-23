@@ -477,8 +477,14 @@ def add_itens_in_dicts(func, dict1, dict2, word, words):
         # Conta a frequencia das palavras anteriores e posteriores
         for j, item in enumerate(words):
             if item == word:
-                previous_word = words[j - 1]
-                subsequent_word = words[j + 1]
+                if words[j] == words[0]:
+                    previous_word = words[-1]
+                else:
+                    previous_word = words[j - 1]
+                if words[j] == words[-1]:
+                    subsequent_word = words[0]
+                else:
+                    subsequent_word = words[j + 1]
 
                 # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in dict1:
