@@ -396,12 +396,12 @@ def get_subsequent_in_phrase(word, words):
 
 def check_tie(dict1, dict2, lista):
     """
-        Encontra as palavras mais frequentes e ve se tem empate de aparições
-        :param dict1: dict das palavras anteriores
-        :param dict2: dict das palavras posteriores
-        :param lista: lista de indices da palavra escolhida pelo usuário
-        :return: mensagem de erro
-        """
+    Encontra as palavras mais frequentes e ve se tem empate de aparições
+    :param dict1: dict das palavras anteriores
+    :param dict2: dict das palavras posteriores
+    :param lista: lista de indices da palavra escolhida pelo usuário
+    :return: mensagem de erro
+    """
     # Encontra a(s) palavra(s) mais frequente(s)
     previous_word = max(dict1, key=lambda k: dict1[k])
     subsequent_word = max(dict2, key=lambda k: dict2[k])
@@ -415,6 +415,14 @@ def check_tie(dict1, dict2, lista):
 
 
 def check_print_tie(lista1, lista2, word):
+    """
+    Essa função imprime as listas de palavras mais frequentes e imprime a frase mais comum formada pela
+    anteior mais frequente, pela palavra escolhida pelo usuário e pela palavra subsequente mais frequente
+    :param lista1: lista de palavras anteriores com o maior número de aparições
+    :param lista2: lista de palavras posteriores com o maior número de aparições
+    :param word: palavra que o usuário digitou
+    :return: retorna a frase mais comum
+    """
     print('-' * 150)
     print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
           "uma é porque estão empatadas na frequencia.\n")

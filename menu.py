@@ -54,7 +54,7 @@ def menu():
             elif answer == 4:
                 text = get_text(path)
                 print("Escolha uma opção:\n")
-                print("[1] -> Defina uma casa de distância da sua escolha para o programa fazer a busca")
+                print("[1] -> Ver frequencia das palavras e frase mais provável")
                 print("[2] -> Voltar ao menu principal")
                 print("[3] -> Sair\n")
 
@@ -271,28 +271,130 @@ def desempatar(lista):
     return escolha
 
 
-def print_most_commons(lista1, lista2, word):
-    """"
-    imprime a frase mais provável
-    :param lista1: lista das anteriores mais freuquentes
-    :param lista2: lista das posteriores mais freuquentes
-    :param word: palavra escolhida pelo usuário
-    :return: frase mais provável
+def print_phrase(frase, words):
+    """
+    Essa função imprime as frases mais provaveis de acordo com a frequencia das palavras. O usuário pode continuar
+    o programa e formar frases maiores de acordo com a sua vontade
+    :param frase: frase que foi formada anteiormente, quando o usuário digitou a palavra que ele quis
+    :param words: todas as palavras presentes no texto
+    :return: Mensagem de programa encerrado
+    """
+    resp = 0
+    while resp < 1:
+        palavras = frase.split()
+        palavra_inicial = palavras[0]
+        palavra_final = palavras[-1]
+        anterior = get_previous_in_phrase(palavra_inicial, words)
+        posterior = get_subsequent_in_phrase(palavra_final, words)
+        nova_frase = f"{anterior} {frase} {posterior}"
+
+        frase = nova_frase
+
+        try:
+            resp = int(input("Digite 0 para continuar, e qualquer outro valor para sair: "))
+            if resp != 0:
+                print(nova_frase)
+                break
+            else:
+                print(nova_frase)
+        except ValueError:
+            print("Digite um valor inteiro positivo")
+    return print("Programa encerrado.")
+
+
+def get_previous(lista1, word):
+    """
+    Essa função pega a palavra anterior mais frequente da palavra digitada pelo usuário
+    :param lista1: lista de palavras anteriores mais frequentes
+    :param word: palavra digitada pelo usuário
+    :return: Mensagem de erro
     """
     if word:
         options = {
-            (True, True): (desempatar(lista1), desempatar(lista2)),
-            (True, False): (desempatar(lista1), lista2[0]),
-            (False, True): (lista1[0], desempatar(lista2)),
-            (False, False): (lista1[0], lista2[0])
+            True: (desempatar(lista1)),
+            False: (lista1[0])
         }
 
-        immediate_previous, immediate_subsequent = options[(len(lista1) > 1, len(lista2) > 1)]
+        immediate_previous = options[len(lista1) > 1]
+        return immediate_previous
+    return print("Essa palavra não esta no documento")
 
-        return print(f"A frase mais provável é: {immediate_previous} {word} {immediate_subsequent}")
+
+def get_previous_in_phrase(word, words):
+    """
+    Essa função atribui valores à lista e as dicts de anteriores e posteriores criadas nesta função para
+    que não fossem utiizadas as dicts originais, ou seja, com valores referentes e relacionados à palavra
+    digitada pelo usuário, já que a palavra que deveria ser o parametro dessa vez não é a digitada pelo
+    usuário antes. Depois disso ela realiza a função get_previous para a palavra inicial da frase.
+    :param word: palavra inicial da frase
+    :param words: todas as palavras presentes no texto
+    :return: a função get_previous, ou seja, palavra anterior mais frequente ou mensagem de erro
+    """
+    lista = []
+    previous1 = {}
+    subsequent1 = {}
+    fill_itens(lista, word, words, previous1, subsequent1)
+    check_tie(previous1, subsequent1, lista)
+    lista1, lista2 = check_tie(previous1, subsequent1, lista)
+
+    if word:
+        options = {
+            True: (desempatar(lista1)),
+            False: (lista1[0])
+        }
+
+        immediate_previous = options[len(lista1) > 1]
+        return immediate_previous
+    return print("Essa palavra não esta no documento")
 
 
-def check_tie(dict1, dict2, lista, word=None):
+def get_subsequent(lista2, word):
+    """
+    Essa função pega a palavra posterior mais frequente da palavra digitada pelo usuário
+    :param lista2: lista de palavras posteriores mais frequentes
+    :param word: palavra digitada pelo usuário
+    :return: Mensagem de erro
+    """
+    if word:
+        options = {
+            True: (desempatar(lista2)),
+            False: (lista2[0])
+        }
+
+        immediate_subsequent = options[len(lista2) > 1]
+        return immediate_subsequent
+    return print("Essa palavra não esta no documento")
+
+
+def get_subsequent_in_phrase(word, words):
+    """
+    Essa função atribui valores à lista e as dicts de anteriores e posteriores criadas nesta função para
+    que não fossem utiizadas as dicts originais, ou seja, com valores referentes e relacionados à palavra
+    digitada pelo usuário, já que a palavra que deveria ser o parametro dessa vez não é a digitada pelo
+    usuário antes. Depois disso ela realiza a função get_subsequent para a palavra final da frase.
+    :param word: palavra final da frase
+    :param words: todas as palavras presentes no texto
+    :return: a função get_subsequent, ou seja, palavra posterior mais frequente ou mensagem de erro
+    """
+    lista = []
+    previous2 = {}
+    subsequent2 = {}
+    fill_itens(lista, word, words, previous2, subsequent2)
+    check_tie(previous2, subsequent2, lista)
+    lista1, lista2 = check_tie(previous2, subsequent2, lista)
+
+    if word:
+        options = {
+            True: (desempatar(lista2)),
+            False: (lista2[0])
+        }
+
+        immediate_subsequent = options[len(lista2) > 1]
+        return immediate_subsequent
+    return print("Essa palavra não esta no documento")
+
+
+def check_tie(dict1, dict2, lista):
     """
     Encontra as palavras mais frequentes e ve se tem empate de aparições
     :param dict1: dict das palavras anteriores
@@ -308,16 +410,32 @@ def check_tie(dict1, dict2, lista, word=None):
     previous_word_tie = [word for word in dict1 if dict1[word] == dict1[previous_word]]
     subsequent_word_tie = [word for word in dict2 if dict2[word] == dict2[subsequent_word]]
     if len(lista) > 0:
-        print('-' * 150)
-        print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
-              "uma é porque estão empatadas na frequencia.\n")
-        print("Lista das mais frequentes anteriores:")
-        print(previous_word_tie, "\n")
-        print("Lista das mais frequentes posteriores:")
-        print(subsequent_word_tie, "\n")
-        print_most_commons(previous_word_tie, subsequent_word_tie, word)
         return previous_word_tie, subsequent_word_tie
     return print("não tem nenhuma palavra nas listas")
+
+
+def check_print_tie(lista1, lista2, word):
+    """
+    Essa função imprime as listas de palavras mais frequentes e imprime a frase mais comum formada pela
+    anteior mais frequente, pela palavra escolhida pelo usuário e pela palavra subsequente mais frequente
+    :param lista1: lista de palavras anteriores com o maior número de aparições
+    :param lista2: lista de palavras posteriores com o maior número de aparições
+    :param word: palavra que o usuário digitou
+    :return: retorna a frase mais comum
+    """
+    print('-' * 150)
+    print("As seguintes listas conterão a mais frequente palavra de acordo com sua categoria, e se houver mais de "
+          "uma é porque estão empatadas na frequencia.\n")
+    print("Lista das mais frequentes anteriores:")
+    print(lista1, "\n")
+    print("Lista das mais frequentes posteriores:")
+    print(lista2, "\n")
+    anterior = get_previous(lista1, word)
+    posterior = get_subsequent(lista2, word)
+    comuns = f"{anterior} {word} {posterior}"
+    if comuns:
+        print(comuns, "\n")
+        return comuns
 
 
 def frequency(dict1, dict2, lista):
@@ -364,14 +482,17 @@ def add_itens_in_dicts(func, dict1, dict2, word, words):
     que agora não estará mais vazio, como no início
     """
     if func > 0:
-
-        position = int(input("Digite de qual posição você quer que o programa imprima o termo: "))
-
         # Conta a frequencia das palavras anteriores e posteriores
         for j, item in enumerate(words):
             if item == word:
-                previous_word = words[j - position]
-                subsequent_word = words[j + position]
+                if words[j] == words[0]:
+                    previous_word = words[-1]
+                else:
+                    previous_word = words[j - 1]
+                if words[j] == words[-1]:
+                    subsequent_word = words[0]
+                else:
+                    subsequent_word = words[j + 1]
 
                 # Se a palavra já estiver no dict das anteriores, adiciona mais 1 ao seu valor
                 if previous_word in dict1:
@@ -389,6 +510,20 @@ def add_itens_in_dicts(func, dict1, dict2, word, words):
     return dict1, dict2
 
 
+def fill_itens(lista, word, words, dict1, dict2):
+    """
+    Preenche automaticamente as listas e os dicts de acordo com a palavra em análise
+    :param lista: lista de índices da palavra em análise
+    :param word: palavra em análise
+    :param words: todas as palavras do texto
+    :param dict1: lista de palavras anteriores à palavra em análise
+    :param dict2: lista de palavras posteriores à palavra em análise
+    :return: ela preenche as listas e os dicts
+    """
+    list_add = add_in_list(lista, word, words)
+    add_itens_in_dicts(list_add, dict1, dict2, word, words)
+
+
 def show_all(txt):
     """
     Calcula a frequencia de aparições das palavras
@@ -402,11 +537,14 @@ def show_all(txt):
     subsequent = {}
 
     if word in words:
-        list_add = add_in_list(lista_de_busca, word, words)
-        add_itens_in_dicts(list_add, previous, subsequent, word, words)
+        fill_itens(lista_de_busca, word, words, previous, subsequent)
         frequency(previous, subsequent, lista_de_busca)
         print_percentage(previous, subsequent)
-        check_tie(previous, subsequent, lista_de_busca, word)
+        check_tie(previous, subsequent, lista_de_busca)
+        lista1, lista2 = check_tie(previous, subsequent, lista_de_busca)
+        frase = check_print_tie(lista1, lista2, word)
+
+        print_phrase(frase, words)
         return print("Todas as informações de frequencia foram mostradas acima")
     return print("A palavra que você buscou não está no documento lido.")
 
