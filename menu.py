@@ -52,8 +52,7 @@ def menu():
             elif answer == 3:
                 answer_3(path)
             elif answer == 4:
-                text = get_text(path)
-                print("Escolha uma opção:\n")
+                print("\nEscolha uma opção:\n")
                 print("[1] -> Ver frequencia das palavras e frase mais provável")
                 print("[2] -> Voltar ao menu principal")
                 print("[3] -> Sair\n")
@@ -61,7 +60,17 @@ def menu():
                 option = int(input("Digite a sua opção: "))
 
                 if option == 1:
-                    show_all(text)
+                    words = list_the_words(path)
+                    word = input("digite a palavra que quer pesquisar: ")
+                    frase = show_all(words, word)
+                    print("Quer ver a frase mais comum?")
+                    print("[1] -> Sim")
+                    print("[0] -> Não")
+                    resp = int(input("Escolha sua opção: "))
+                    if resp == 1:
+                        print_phrase(frase, words)
+                    if resp == 0:
+                        continue
                 elif option == 2:
                     continue
                 elif option == 3:
@@ -438,23 +447,6 @@ def check_print_tie(lista1, lista2, word):
         return comuns
 
 
-def frequency(dict1, dict2, lista):
-    """
-    Imprime a frequencia de aparições no texto das palavras anteriores e posteriores à escolhida pelo usuário
-    :param dict1: dict de palavras anteriores à escolhida pelo usuário
-    :param dict2: dict de palavras posteriores à escolhida pelo usuário
-    :param lista: lista de indices da palavra escolhida pelo usuário
-    :return: mensagem de erro
-    """
-
-    if len(lista) > 0:
-        print("\nPalavras anteriores à que você escolheu e sua frequência de aparições: ")
-        print(dict1)
-        print("\nPalavras posteriores à que você escreveu e sua frequência de aparições: ")
-        print(dict2, "\n")
-    return "não tem palavras nas listas"
-
-
 def add_in_list(lista, word, words):
     """
     adiciona itens em uma lista se esse item for igual a palavra escolhida pelo usuário.
@@ -524,28 +516,24 @@ def fill_itens(lista, word, words, dict1, dict2):
     add_itens_in_dicts(list_add, dict1, dict2, word, words)
 
 
-def show_all(txt):
+def show_all(words, word):
     """
     Calcula a frequencia de aparições das palavras
-    :param txt: texto do documento
+    :param words: palavras do texto
     :return: mensagem de erro
     """
-    words = text_clean(txt).split()
-    word = input("digite a palavra que quer pesquisar: ")
     lista_de_busca = []
     previous = {}
     subsequent = {}
 
     if word in words:
         fill_itens(lista_de_busca, word, words, previous, subsequent)
-        frequency(previous, subsequent, lista_de_busca)
         print_percentage(previous, subsequent)
         check_tie(previous, subsequent, lista_de_busca)
         lista1, lista2 = check_tie(previous, subsequent, lista_de_busca)
         frase = check_print_tie(lista1, lista2, word)
 
-        print_phrase(frase, words)
-        return print("Todas as informações de frequencia foram mostradas acima")
+        return frase
     return print("A palavra que você buscou não está no documento lido.")
 
 
